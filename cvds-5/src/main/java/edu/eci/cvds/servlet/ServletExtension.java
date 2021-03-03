@@ -36,14 +36,14 @@ public class ServletExtension extends HttpServlet{
             infoToDo.add(info);
             resp.setStatus(HttpServletResponse.SC_OK);
             responseWriter.write(Service.todosToHTMLTable(infoToDo));
-            //res = Service.todosToHTMLTable(infoToDo);
+
             responseWriter.flush();              
         }
         
         catch (NumberFormatException e){
             
              resp.setStatus(HttpServletResponse.SC_NOT_IMPLEMENTED);
-             res= "Requerimiento Inválido 1";
+             res= "Requerimiento Inválido: debe ingresar un numero";
         }
         
         
@@ -54,7 +54,45 @@ public class ServletExtension extends HttpServlet{
         
 
         catch (Exception e){
-            res="Requerimiento Invalido 2";
+            res="no existe un item con el identificador dado";
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            e.printStackTrace();
+        }
+        finally{
+            responseWriter.write(res);
+        }  
+    }
+     @Override
+   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+       String res = "";
+       Writer responseWriter = resp.getWriter();
+       
+         try {
+            Optional<String> ResponseId = Optional.ofNullable(req.getParameter("id"));
+            Integer id = (Integer.parseInt(ResponseId.get()));
+            Todo info = Service.getTodo(id);           
+            ArrayList<Todo> infoToDo = new ArrayList<>();
+            infoToDo.add(info);
+            resp.setStatus(HttpServletResponse.SC_OK);
+            responseWriter.write(Service.todosToHTMLTable(infoToDo));
+            responseWriter.flush();              
+        }
+        
+        catch (NumberFormatException e){
+            
+             resp.setStatus(HttpServletResponse.SC_NOT_IMPLEMENTED);
+             res= "Requerimiento Inválido: debe ingresar un numero";
+        }
+        
+        
+        catch (MalformedURLException e){
+           res="Error interno en el Servidor ";
+           resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+        
+
+        catch (Exception e){
+            res="no existe un item con el identificador dado";
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             e.printStackTrace();
         }
