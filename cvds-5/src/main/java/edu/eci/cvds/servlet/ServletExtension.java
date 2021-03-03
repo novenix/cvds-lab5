@@ -29,38 +29,34 @@ public class ServletExtension extends HttpServlet{
        Writer responseWriter = resp.getWriter();
        
          try {
-            
             Optional<String> ResponseId = Optional.ofNullable(req.getParameter("id"));
             Integer id = (Integer.parseInt(ResponseId.get()));
             Todo info = Service.getTodo(id);           
-            ArrayList<Todo> infoToDos = new ArrayList<>();
-            infoToDos.add(info);
+            ArrayList<Todo> infoToDo = new ArrayList<>();
+            infoToDo.add(info);
             resp.setStatus(HttpServletResponse.SC_OK);
-            res = Service.todosToHTMLTable(infoToDos);
+            responseWriter.write(Service.todosToHTMLTable(infoToDo));
+            //res = Service.todosToHTMLTable(infoToDo);
             responseWriter.flush();              
         }
         
-        catch ( NumberFormatException e){
+        catch (NumberFormatException e){
             
              resp.setStatus(HttpServletResponse.SC_NOT_IMPLEMENTED);
              res= "Requerimiento Inválido 1";
         }
         
-        catch (FileNotFoundException e){
-            
-            resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            res="No encontrado";
-        }
         
         catch (MalformedURLException e){
            res="Error interno en el Servidor ";
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+           resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
         
 
         catch (Exception e){
             res="Requerimiento Invalido 2";
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            e.printStackTrace();
         }
         finally{
             responseWriter.write(res);
