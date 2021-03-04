@@ -18,6 +18,8 @@
             <h:outputLabel value="#{calculadoraBean.standar}" />
             <h:outputLabel value="Varianza:" />
             <h:outputLabel value="#{calculadoraBean.variance}" />
+            <h:outputLabel value="Datos ingresados previamente:" />
+            <h:outputLabel value="#{calculadoraBean.oldData}" />
             
             <h:commandButton value="Reiniciar" update="calculadora_form" actionListener="#{calculadoraBean.restart}"/>
             <h:commandButton value="Calcular"  update="calculadora_form" actionListener="#{calculadoraBean.initList(input.value)}"/>
